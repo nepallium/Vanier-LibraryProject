@@ -29,7 +29,7 @@ Functionalities that will be demonstrated:
 
 ### 4. Class Hierarchies
 - **Hierarchy 1:** `User` (abstract) → `Student`, `Librarian`
-- **Hierarchy 2:** `Item` (abstract) → `Book` (abstract) → `NormalBook`, `ReferenceBook`
+- **Hierarchy 2:** `Book` (abstract) → `NormalBook`, `ReferenceBook`
 
 ### 5. Interface
 **`Issuable` interface**:
@@ -46,8 +46,12 @@ Functionalities that will be demonstrated:
     | Reference | Shelf location, specify book is not issuable |
 - **Overloading**
   - In `Librarian`, we provide two ways to lend:
-  - issueBook(NormalBook book, Student s) { ... }
-  - issueBook(String isbn, String studentId) { ... }
+``` java
+public boolean issueBook(NormalBook book, Student s) {}
+```
+```java
+public boolean issueBook(String isbn, String studentId) {}
+```
 
 ### 7. Text I/O
 - `loadBooks(String path)` in `Librarian` that reads a CSV file and adds all books to a `List`
