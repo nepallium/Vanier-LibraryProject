@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.*;
 
 public class LibrarySystem {
@@ -5,8 +9,6 @@ public class LibrarySystem {
     public static Queue<NormalBook> returnedBooks = new LinkedList<>();
     public static List<Librarian> librarians = new ArrayList<>();
     public static List<Student> students = new ArrayList<>();
-
-    private static Scanner scanner = new Scanner(System.in);
 
     /**
      * Issues book to a student based on book object and student object
@@ -34,13 +36,26 @@ public class LibrarySystem {
      * Exports all books from the library into books.csv
      */
     public void exportBooks() {
+        File file = new File("src/main/resources/books.csv");
+        try (FileWriter fw = new FileWriter(file)) {
+            fw.write("");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         for (Book book : books) {
             if (book instanceof NormalBook nb) {
-                exportNormalBook(nb);
+                exportNormalBook(nb, file);
             } else if (book instanceof ReferenceBook rb) {
-                exportReferenceBook(rb);
+                exportReferenceBook(rb, file);
             }
         }
+    }
+
+    private String concatenateBasicBookInfo(Book book) {
+        String details = String.format("%s,%s,%s,%d,", book.getTitle(), book.getAuthor().getName(), book.getIsbn(), book.getPages());
+        details += book.getStatus() + ",";
+        return details;
     }
 
     /**
@@ -48,8 +63,16 @@ public class LibrarySystem {
      *
      * @param book the normal book
      */
-    private void exportNormalBook(NormalBook book) {
-        //TODO
+    private void exportNormalBook(NormalBook book, File file) {
+        try (FileWriter fw = new FileWriter(file, true)) {
+            String details = concatenateBasicBookInfo(book);
+            details += book.getCurrentBorrower().getName() + ",";
+            details += book.getDueDate() + ",";
+
+            fw.write(details + "\n");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -57,8 +80,16 @@ public class LibrarySystem {
      *
      * @param book
      */
-    private void exportReferenceBook(ReferenceBook book) {
-        //TODO
+    private void exportReferenceBook(ReferenceBook book, File file) {
+        try (FileWriter fw = new FileWriter(file, true)) {
+            String details = concatenateBasicBookInfo(book);
+            details += book.getShelfLocation() + ",";
+            details += book.getTotalCopies() + ",";
+
+            fw.write(details + "\n");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -68,7 +99,11 @@ public class LibrarySystem {
      * @return the list of books containing the keyword
      */
     public List<Book> searchBooks(String keyword) {
-        String kw = keyword.toLowerCase().trim();
+        if (keyword == null) {
+            throw new InvalidParameterException();
+        }
+
+        String kw = keyword.trim().toLowerCase();
 
         return books.stream()
                 .filter(Objects::nonNull)
