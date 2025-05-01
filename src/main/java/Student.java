@@ -3,15 +3,14 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
 @Getter
 public class Student extends User {
     private static int nextId = 1;
-
     private List<NormalBook> borrowedBooks;
 
-    public Student(String name, Gender gender, int id) {
+    public Student(String name, Gender gender) {
         super(name, gender);
         this.setId(nextId++);
         this.borrowedBooks = new ArrayList<>();
@@ -20,19 +19,21 @@ public class Student extends User {
     /**
      * Borrows a book from the library and adds it to the student's borrowed books
      *
-     * @param book
+     * @param book the book to borrow
+     * @return
      */
-    public void borrowBook(NormalBook book) {
-        //TODO
+    public boolean borrowBook(NormalBook book) {
+        //TODO set due date once borrowed
+        return true;
     }
 
     /**
      * Returns a borrowed book to the library
      *
-     * @param book
+     * @param book the book to return
      */
     public boolean returnBook(NormalBook book) {
-        //TODO
+        //TODO mark book as available
         return true;
     }
 
