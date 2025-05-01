@@ -58,14 +58,11 @@ public class LibrarySystem {
      * Builds first common CSV columns for any book
      *
      * @param book the book
-     * @return title,author,isbn,pages,status,
+     * @return title,author,isbn,pages,
      */
     private static String concatenateBasicBookInfo(Book book) {
         if (book.getAuthor() == null) {
             throw new IllegalArgumentException("book.author must not be null");
-        }
-        if (book.getStatus() == null) {
-            throw new IllegalArgumentException("book.status must not be null");
         }
 
         return String.format(
@@ -73,8 +70,7 @@ public class LibrarySystem {
                 book.getTitle(),
                 book.getAuthor().getName(),
                 book.getIsbn(),
-                book.getPages(),
-                book.getStatus()
+                book.getPages()
         );
     }
 
