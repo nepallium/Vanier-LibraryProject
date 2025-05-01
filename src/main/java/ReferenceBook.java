@@ -10,10 +10,10 @@ public class ReferenceBook extends Book {
     private String shelfLocation;
     private int totalCopies;
 
-    public ReferenceBook(String isbn, String title, int pages, Author author, int totalCopies, String shelfLocation) {
-        super(isbn, title, pages, author);
-        this.totalCopies = totalCopies;
+    public ReferenceBook(String title, Author author, String isbn, int pages, String shelfLocation, int totalCopies) {
+        super(title, author, isbn, pages);
         this.shelfLocation = shelfLocation;
+        this.totalCopies = totalCopies;
     }
 
     /**
