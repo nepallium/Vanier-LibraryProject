@@ -1,9 +1,8 @@
 import lombok.*;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
 @Getter
-@Setter
 public class Librarian extends User {
     private static int nextId = 1;
 
@@ -18,13 +17,13 @@ public class Librarian extends User {
      * @param path the path to read from
      */
     public void addNewBooksToLibrary(String path) {
-        //TODO
+        //TODO add book to library, check if duplicates exist
     }
 
     /**
      * Processes a returned book from the library's queue of returned books to make it available again
      */
     public void processReturn() {
-        //TODO
+        //TODO process return and mark book as AVAILABLE
     }
 }
