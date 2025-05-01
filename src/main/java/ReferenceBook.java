@@ -24,7 +24,7 @@ public class ReferenceBook extends Book {
                         "Shelf location: %s\n\t" +
                         "Total copies: %d\n\t" +
                         "Pages: %d\n\t" +
-                        "NOTE: Book is not issuable, put it back place after use",
+                        "NOTE: Book is not issuable, put it back in place after use",
                 getTitle(), getAuthor().getName(), shelfLocation, totalCopies, getPages());
 
         System.out.println(info);
