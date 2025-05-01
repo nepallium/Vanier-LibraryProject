@@ -17,7 +17,7 @@ public class LibrarySystem {
      * @param book the book to issue
      * @param s    the borrower student
      */
-    public void issueBook(NormalBook book, Student s) {
+    public static void issueBook(NormalBook book, Student s) {
         //TODO
     }
 
@@ -28,15 +28,17 @@ public class LibrarySystem {
      * @param isbn      the isbn code of the book
      * @param studentId the student's id
      */
-    public void issueBook(String isbn, String studentId) {
+    public static void issueBook(String isbn, String studentId) {
         //TODO
     }
 
     /**
      * Exports all books from the library into books.csv
      */
-    public void exportBooks() {
+    public static void exportBooks() {
         File file = new File("src/main/resources/books.csv");
+
+//        Clear the file
         try (FileWriter fw = new FileWriter(file)) {
             fw.write("");
         } catch (IOException e) {
@@ -52,10 +54,28 @@ public class LibrarySystem {
         }
     }
 
-    private String concatenateBasicBookInfo(Book book) {
-        String details = String.format("%s,%s,%s,%d,", book.getTitle(), book.getAuthor().getName(), book.getIsbn(), book.getPages());
-        details += book.getStatus() + ",";
-        return details;
+    /**
+     * Builds first common CSV columns for any book
+     *
+     * @param book the book
+     * @return title,author,isbn,pages,status,
+     */
+    private static String concatenateBasicBookInfo(Book book) {
+        if (book.getAuthor() == null) {
+            throw new IllegalArgumentException("book.author must not be null");
+        }
+        if (book.getStatus() == null) {
+            throw new IllegalArgumentException("book.status must not be null");
+        }
+
+        return String.format(
+                "%s,%s,%s,%d,%s,",
+                book.getTitle(),
+                book.getAuthor().getName(),
+                book.getIsbn(),
+                book.getPages(),
+                book.getStatus()
+        );
     }
 
     /**
@@ -63,12 +83,16 @@ public class LibrarySystem {
      *
      * @param book the normal book
      */
-    private void exportNormalBook(NormalBook book, File file) {
-        try (FileWriter fw = new FileWriter(file, true)) {
-            String details = concatenateBasicBookInfo(book);
-            details += book.getCurrentBorrower().getName() + ",";
-            details += book.getDueDate() + ",";
+    private static void exportNormalBook(NormalBook book, File file) {
+        String borrower = (book.getCurrentBorrower() != null)
+                ? book.getCurrentBorrower().getName() : "";
+        String dueDate = (book.getDueDate() != null)
+                ? book.getDueDate().toString() : "";
 
+        String details = concatenateBasicBookInfo(book)
+                + borrower + "," + dueDate + ",";
+
+        try (FileWriter fw = new FileWriter(file, true)) {
             fw.write(details + "\n");
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -80,12 +104,12 @@ public class LibrarySystem {
      *
      * @param book
      */
-    private void exportReferenceBook(ReferenceBook book, File file) {
-        try (FileWriter fw = new FileWriter(file, true)) {
-            String details = concatenateBasicBookInfo(book);
-            details += book.getShelfLocation() + ",";
-            details += book.getTotalCopies() + ",";
+    private static void exportReferenceBook(ReferenceBook book, File file) {
+        String details = concatenateBasicBookInfo(book)
+                + book.getShelfLocation() + ","
+                + book.getTotalCopies() + ",";
 
+        try (FileWriter fw = new FileWriter(file, true)) {
             fw.write(details + "\n");
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -98,7 +122,7 @@ public class LibrarySystem {
      * @param keyword the keyword to look for
      * @return the list of books containing the keyword
      */
-    public List<Book> searchBooks(String keyword) {
+    public static List<Book> searchBooks(String keyword) {
         if (keyword == null) {
             throw new InvalidParameterException();
         }
