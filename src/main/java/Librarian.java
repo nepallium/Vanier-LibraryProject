@@ -15,7 +15,7 @@ public class Librarian extends User {
     /**
      * Adds new books from an input csv file into the library's list of books
      *
-     * @param path
+     * @param path the path to read from
      */
     public void addNewBooksToLibrary(String path) {
         //TODO
