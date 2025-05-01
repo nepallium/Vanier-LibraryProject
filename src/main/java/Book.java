@@ -28,6 +28,10 @@ public abstract class Book {
 
         @Override
         public int compare(Book o1, Book o2) {
+            if (o1 == null || o2 == null) {
+                throw new IllegalArgumentException("books must not be null");
+            }
+
             return switch (criteria) {
                 case "title" -> o1.title.compareTo(o2.title);
                 case "pages" -> o1.pages - o2.pages;
