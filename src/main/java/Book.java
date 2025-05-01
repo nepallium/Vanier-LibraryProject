@@ -10,14 +10,12 @@ public abstract class Book {
     private Author author;
     private String isbn;
     private int pages;
-    private Issuable.Status status;
 
     public Book(String title, Author author, String isbn, int pages) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
         this.pages = pages;
-        this.status = Issuable.Status.AVAILABLE;
     }
 
     public abstract void displayBook();

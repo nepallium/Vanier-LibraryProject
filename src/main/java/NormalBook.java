@@ -12,11 +12,13 @@ public class NormalBook extends Book implements Issuable, Comparable<Book> {
     private LocalDate dueDate;
     private int loanPeriodWeeks = 4;
     private static final double DAILY_FEE = 0.5;
+    private Issuable.Status status;
 
     private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
     public NormalBook(String title, Author author, String isbn, int pages) {
         super(title, author, isbn, pages);
+        this.status = Issuable.Status.AVAILABLE;
     }
 
     /**
