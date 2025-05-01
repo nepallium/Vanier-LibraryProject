@@ -86,7 +86,7 @@ public class LibrarySystem {
                 ? book.getDueDate().toString() : "";
 
         String details = concatenateBasicBookInfo(book)
-                + borrower + "," + dueDate + ",";
+                + book.getStatus() + "," + borrower + "," + dueDate;
 
         try (FileWriter fw = new FileWriter(file, true)) {
             fw.write(details + "\n");
@@ -103,7 +103,7 @@ public class LibrarySystem {
     private static void exportReferenceBook(ReferenceBook book, File file) {
         String details = concatenateBasicBookInfo(book)
                 + book.getShelfLocation() + ","
-                + book.getTotalCopies() + ",";
+                + book.getTotalCopies();
 
         try (FileWriter fw = new FileWriter(file, true)) {
             fw.write(details + "\n");
