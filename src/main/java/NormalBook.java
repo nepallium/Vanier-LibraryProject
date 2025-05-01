@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-public class NormalBook extends Book implements Issuable {
+public class NormalBook extends Book implements Issuable, Comparable<Book> {
     private Student currentBorrower;
     private LocalDate dueDate;
     private int loanPeriodWeeks = 4;
@@ -64,5 +64,29 @@ public class NormalBook extends Book implements Issuable {
 
         info += "\n\tPages: " + getPages();
         System.out.println(info);
+    }
+
+    @Override
+    public int compareTo(Book o) {
+        if (!(o instanceof NormalBook other)) {
+            return 0;
+        }
+
+        // Treat null dueDate as "infinitely far in the future"
+        if (this.dueDate == null && other.dueDate == null) {
+            return 0;
+        }
+        if (this.dueDate == null) {
+            return 1;
+        }
+        if (other.dueDate == null) {
+            return -1;
+        }
+
+        long thisDaysOverdue = ChronoUnit.DAYS.between(dueDate, LocalDate.now());
+        long otherDaysOverdue = ChronoUnit.DAYS.between(other.dueDate, LocalDate.now());
+
+        return Long.compare(otherDaysOverdue, thisDaysOverdue) * 1000 +
+                this.getTitle().compareTo(o.getTitle());
     }
 }
