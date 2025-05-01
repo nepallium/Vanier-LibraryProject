@@ -10,7 +10,7 @@ Functionalities that will be demonstrated:
 - Class hierarchies and OOP
 - Interfaces
 - Runtime polymorphism (overriding and overloading)
-- Java collections: `Map`, `List`, `Set`, `Queue`
+- Java collections: `List`, `Queue`
 - File I/O with CSV files
 - `Comparable` and `Comparator` for sorting
 - Test-Driven Development with JUnit tests
@@ -22,7 +22,7 @@ Functionalities that will be demonstrated:
   - Issue books to a student
   - Process returns (i.e. make the book available for borrowing again).
 - **Students** 
-  - Search the catalog by title/author/year
+  - Search the catalog using a keyword
   - Borrow books (if available)
   - Return previously borrowed books
 - Changes should be reflected in the appropriate CSV files
@@ -42,10 +42,10 @@ Functionalities that will be demonstrated:
   - Common `displayBook()` in the abstract `Book` class
   - | Book      | Display info                                 |
     |-----------|----------------------------------------------|
-    | Normal    | Available copies, expected return date       |
+    | Normal    | Book issue status, expected return date      |
     | Reference | Shelf location, specify book is not issuable |
 - **Overloading**
-  - In `Librarian`, we provide two ways to lend:
+  - In `LibrarySystem`, we provide two ways to lend:
 ``` java
 public boolean issueBook(NormalBook book, Student s) {}
 ```
@@ -54,9 +54,9 @@ public boolean issueBook(String isbn, String studentId) {}
 ```
 
 ### 7. Text I/O
-- `loadBooks(String path)` in `Librarian` that reads a CSV file and adds all books to a `List`
+- `addNewBooksToLibrary(String path)` in `Librarian` that reads a CSV file and adds all books to a `List`
   - Provides an efficient alternative to add books to the library. Only accessible by `Librarian`s
-- `exportBooks()` in `Book` that exports all current books into a CSV file
+- `exportBooks()` in `LibrarySystem` that exports all current books into a CSV file
   - Allows easy overview of current books. Librarians could also use this to quickly delete a book by removing a line from the CSV. 
 
 ### 8. Comparable and Comparator
@@ -68,17 +68,16 @@ public class NormalBook implements Comparable<NormalBook>
 ``` java
 public class Book implements Comparator<Book>
 ```
-- This will compare books based on either name, pages, author, or year 
+- This will compare books based on either title, pages, author, or isbn 
 
 ### 9. UML Class Diagram
 - Navigate to `doc/uml_class_diagram`
 
 ### 10. Deliverable 2
-For Deliverable 2, I will roughly deliver:
+For Deliverable 2:
 - All class and interface definitions
 - Documentation for methods
 - JUnit tests
 - Partial implementations:
-  - Basic loan and return logic for books
   - Basic CSV read/write
-  - User login
+  - Book display
