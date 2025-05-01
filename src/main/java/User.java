@@ -4,7 +4,7 @@ import lombok.*;
 @ToString
 @Getter
 @Setter
-abstract class User {
+public abstract class User {
     private String name;
     private Gender gender;
     private int id;
