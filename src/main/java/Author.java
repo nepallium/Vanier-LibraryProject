@@ -10,6 +10,10 @@ public class Author implements Comparable<Author> {
     private int age;
     private Gender gender;
 
+    public Author(String name) {
+        this.name = name;
+    }
+
     @Override
     public int compareTo(Author o) {
         return (name.compareTo(o.name)) * 1000 +
