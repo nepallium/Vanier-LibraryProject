@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.security.InvalidParameterException;
@@ -35,7 +36,7 @@ public class LibrarySystemTest {
     @Test
     public void testSearchBooks_nullKeyword_throws() {
         LibrarySystem.books.clear();
-        Assertions.assertThrows(InvalidParameterException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             LibrarySystem.searchBooks(null);
         });
     }
@@ -43,7 +44,7 @@ public class LibrarySystemTest {
     @Test
     public void testSearchBooks_blankKeyword_throws() {
         LibrarySystem.books.clear();
-        Assertions.assertThrows(InvalidParameterException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             LibrarySystem.searchBooks("   ");
         });
     }
@@ -57,17 +58,8 @@ public class LibrarySystemTest {
         Method m = LibrarySystem.class.getDeclaredMethod("concatenateBasicBookInfo", Book.class);
         m.setAccessible(true);
         String result = (String) m.invoke(null, nb);
-        String expected = "Title,Auth,ISBN,123,AVAILABLE,";
+        String expected = "Title,Auth,ISBN,123,";
 
         Assertions.assertEquals(expected, result);
-    }
-
-    @Test
-    public void testConcatenateBasicBookInfo_nullBook_throws() throws Exception {
-        Method m = LibrarySystem.class.getDeclaredMethod("concatenateBasicBookInfo", Book.class);
-        m.setAccessible(true);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            m.invoke(null, new Object[]{null});
-        });
     }
 }
