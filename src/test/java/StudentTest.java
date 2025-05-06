@@ -45,7 +45,7 @@ public class StudentTest {
         boolean ok = student.returnBook(availableBook);
         Assertions.assertTrue(ok);
         Assertions.assertFalse(student.getBorrowedBooks().contains(availableBook));
-        Assertions.assertEquals(Issuable.Status.AVAILABLE, availableBook.getStatus());
+        Assertions.assertEquals(Issuable.Status.PROCESSING, availableBook.getStatus());
         Assertions.assertEquals(availableBook, LibrarySystem.returnedBooks.peek());
     }
 
@@ -63,8 +63,8 @@ public class StudentTest {
     public void testGetLoansByDueDate_sortedAndNonNull() {
         NormalBook b1 = new NormalBook("B1", new Author("X", 20, Gender.MALE), "X1", 10);
         NormalBook b2 = new NormalBook("B2", new Author("X", 20, Gender.MALE), "X2", 10);
-        b1.setDueDate(LocalDate.now().plusDays(5));
-        b2.setDueDate(LocalDate.now().plusDays(2));
+        b1.setLoanPeriodWeeks(4);
+        b2.setLoanPeriodWeeks(1);
 
         student.borrowBook(b1);
         student.borrowBook(b2);
