@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.security.InvalidParameterException;
 import java.util.*;
 
 public class LibrarySystem {
@@ -18,7 +17,20 @@ public class LibrarySystem {
      * @param s    the borrower student
      */
     public static void issueBook(NormalBook book, Student s) {
-        //TODO
+        if (book == null) {
+            throw new IllegalArgumentException("book must not be null");
+        }
+        if (s == null) {
+            throw new IllegalArgumentException("student must not be null");
+        }
+        if (!books.contains(book)) {
+            throw new IllegalArgumentException("book is not in library");
+        }
+        if (!students.contains(s)) {
+            throw new IllegalArgumentException("student is not registered");
+        }
+
+        s.borrowBook(book);
     }
 
     /**
@@ -28,8 +40,34 @@ public class LibrarySystem {
      * @param isbn      the isbn code of the book
      * @param studentId the student's id
      */
-    public static void issueBook(String isbn, String studentId) {
-        //TODO
+    public static void issueBook(String isbn, int studentId) {
+        if (isbn == null) {
+            throw new IllegalArgumentException("isbn must not be null");
+        }
+
+        NormalBook bookToIssue = null;
+        for (Book book : books) {
+            if (book instanceof NormalBook nb && book.getIsbn().equals(isbn)) {
+                bookToIssue = nb;
+                break;
+            }
+        }
+        if (bookToIssue == null) {
+            throw new IllegalArgumentException("isbn is not in book library");
+        }
+
+        Student s = null;
+        for (Student student : students) {
+            if (student != null && student.getId() == studentId) {
+                s = student;
+                break;
+            }
+        }
+        if (s == null) {
+            throw new IllegalArgumentException("student is not registered in library");
+        }
+
+        issueBook(bookToIssue, s);
     }
 
     /**
@@ -52,26 +90,6 @@ public class LibrarySystem {
                 exportReferenceBook(rb, file);
             }
         }
-    }
-
-    /**
-     * Builds first common CSV columns for any book
-     *
-     * @param book the book
-     * @return title,author,isbn,pages,
-     */
-    private static String concatenateBasicBookInfo(Book book) {
-        if (book.getAuthor() == null) {
-            throw new IllegalArgumentException("book.author must not be null");
-        }
-
-        return String.format(
-                "%s,%s,%s,%d,%s,",
-                book.getTitle(),
-                book.getAuthor().getName(),
-                book.getIsbn(),
-                book.getPages()
-        );
     }
 
     /**
@@ -113,6 +131,32 @@ public class LibrarySystem {
     }
 
     /**
+     * Builds first common CSV columns for any book
+     *
+     * @param book the book
+     * @return title, author, isbn, pages
+     */
+    private static String concatenateBasicBookInfo(Book book) {
+        if (book.getAuthor() == null) {
+            throw new IllegalArgumentException("book.author must not be null");
+        }
+        if (book.getTitle() == null || book.getTitle().isBlank()) {
+            throw new IllegalArgumentException("book.title must not be null or blank");
+        }
+        if (book.getIsbn() == null || book.getIsbn().isBlank()) {
+            throw new IllegalArgumentException("book.isbn must not be null or blank");
+        }
+
+        return String.format(
+                "%s,%s,%s,%d,",
+                book.getTitle(),
+                book.getAuthor().getName(),
+                book.getIsbn(),
+                book.getPages()
+        );
+    }
+
+    /**
      * Gives a list of books that contain a specified keyword, case-insensitive
      *
      * @param keyword the keyword to look for
@@ -120,10 +164,14 @@ public class LibrarySystem {
      */
     public static List<Book> searchBooks(String keyword) {
         if (keyword == null) {
-            throw new InvalidParameterException();
+            throw new IllegalArgumentException("keyword must not be null");
         }
 
         String kw = keyword.trim().toLowerCase();
+
+        if (kw.isEmpty()) {
+            throw new IllegalArgumentException("keyword must not be empty");
+        }
 
         return books.stream()
                 .filter(Objects::nonNull)
