@@ -3,14 +3,14 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
-@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-public class NormalBook extends Book implements Issuable, Comparable<Book> {
+public class NormalBook extends Book implements Issuable, Comparable<NormalBook> {
     private Student currentBorrower;
     private LocalDate dueDate;
-    private int loanPeriodWeeks = 4;
+    private int loanPeriodWeeks = 4; // default value
     private static final double DAILY_FEE = 0.5;
     private Issuable.Status status;
 
@@ -69,12 +69,12 @@ public class NormalBook extends Book implements Issuable, Comparable<Book> {
     }
 
     @Override
-    public int compareTo(Book o) {
+    public int compareTo(NormalBook o) {
         if (!(o instanceof NormalBook other)) {
             return 0;
         }
 
-        // Treat null dueDate as "infinitely far in the future"
+        // Treat null dueDate as "infinitely far in the future", or simply no due date
         if (this.dueDate == null && other.dueDate == null) {
             return 0;
         }
@@ -85,10 +85,21 @@ public class NormalBook extends Book implements Issuable, Comparable<Book> {
             return -1;
         }
 
-        long thisDaysOverdue = ChronoUnit.DAYS.between(dueDate, LocalDate.now());
-        long otherDaysOverdue = ChronoUnit.DAYS.between(other.dueDate, LocalDate.now());
-
-        return Long.compare(otherDaysOverdue, thisDaysOverdue) * 1000 +
+        return (this.dueDate.compareTo(other.dueDate)) * 1000 +
                 this.getTitle().compareTo(o.getTitle());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        NormalBook that = (NormalBook) o;
+        return loanPeriodWeeks == that.loanPeriodWeeks && Objects.equals(currentBorrower, that.currentBorrower) && Objects.equals(dueDate, that.dueDate) && status == that.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), dueDate, loanPeriodWeeks, status);
     }
 }
