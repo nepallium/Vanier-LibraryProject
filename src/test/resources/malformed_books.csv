@@ -1,4 +1,4 @@
-T1,A1,ISBN1,10
+T1,A1,ISBN1,10,,,
 badline,missing,fields
-T2,A2,ISBN2,20
+T2,A2,ISBN2,20,,,
 T3,A3,ISBN3,30,ShelfC,5

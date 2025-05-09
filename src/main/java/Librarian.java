@@ -29,28 +29,33 @@ public class Librarian extends User {
         File file = new File(path);
         try (Scanner reader = new Scanner(file)) {
             while (reader.hasNextLine()) {
-                String[] parts = reader.nextLine().split(",");
+                String[] parts = reader.nextLine().split(",", -1);
 
                 if (parts.length >= 4) {
-                    parts = Arrays.stream(parts).map(String::trim).toArray(String[]::new);
+                    parts = Arrays.stream(parts)
+                            .map(String::trim)
+                            .toArray(String[]::new);
                     String title = parts[0];
                     Author author = new Author(parts[1]);
                     String isbn = parts[2];
                     int pages = Integer.parseInt(parts[3]);
 
-                    Book book = null;
-                    if (parts.length == 4) {
+                    Book book;
+                    if (parts.length == 7) {
                         book = new NormalBook(title, author, isbn, pages);
-                    } else {
+                    } else if (parts.length == 6) {
                         String shelfLocation = parts[4];
                         int totalCopies = Integer.parseInt(parts[5]);
                         book = new ReferenceBook(title, author, isbn, pages, shelfLocation, totalCopies);
+                    } else {
+                        continue;
                     }
 
                     boolean duplicateExists = false;
                     for (Book b : LibrarySystem.books) {
                         if (b.equals(book)) {
                             duplicateExists = true;
+                            break;
                         }
                     }
 
