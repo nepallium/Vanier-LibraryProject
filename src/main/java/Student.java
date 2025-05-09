@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-//@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @ToString
 @Getter
 public class Student extends User {
@@ -20,9 +20,10 @@ public class Student extends User {
 
     /**
      * Borrows a book from the library and adds it to the student's borrowed books
+     * Returns false if book is already being borrowed by the student
      *
      * @param book the book to borrow
-     * @return
+     * @return whether the borrowed book has been borrowed successfully
      */
     public boolean borrowBook(NormalBook book) {
         if (book == null) {
@@ -44,6 +45,7 @@ public class Student extends User {
 
     /**
      * Returns a borrowed book to the library
+     * False if the book has not been borrowed by the student.
      *
      * @param book the book to return
      */
@@ -55,6 +57,7 @@ public class Student extends User {
         if (borrowedBooks.remove(book)) {
             book.setStatus(Issuable.Status.PROCESSING);
             book.setDueDate(null);
+            book.setCurrentBorrower(null);
             LibrarySystem.returnedBooks.offer(book);
             return true;
         }
@@ -72,19 +75,5 @@ public class Student extends User {
                 .filter(Objects::nonNull)
                 .sorted()
                 .toList();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Student student = (Student) o;
-        return Objects.equals(borrowedBooks, student.borrowedBooks);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), borrowedBooks);
     }
 }
