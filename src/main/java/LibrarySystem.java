@@ -94,6 +94,7 @@ public class LibrarySystem {
 
     /**
      * Exports a normal book's info into books.csv
+     * title,author,isbn,pages,status,borrower,dueDate
      *
      * @param book the normal book
      */
@@ -103,8 +104,8 @@ public class LibrarySystem {
         String dueDate = (book.getDueDate() != null)
                 ? book.getDueDate().toString() : "";
 
-        String details = concatenateBasicBookInfo(book)
-                + book.getStatus() + "," + borrower + "," + dueDate;
+        String details = concatenateBasicBookInfo(book);
+        details += book.getStatus() + "," + borrower + "," + dueDate;
 
         try (FileWriter fw = new FileWriter(file, true)) {
             fw.write(details + "\n");
@@ -115,6 +116,7 @@ public class LibrarySystem {
 
     /**
      * Exports a reference book's info into books.csv
+     * title,author,isbn,pages,shelfLocation,totalCopies
      *
      * @param book
      */
@@ -134,7 +136,7 @@ public class LibrarySystem {
      * Builds first common CSV columns for any book
      *
      * @param book the book
-     * @return title, author, isbn, pages
+     * @return title,author,isbn,pages
      */
     private static String concatenateBasicBookInfo(Book book) {
         if (book.getAuthor() == null) {
