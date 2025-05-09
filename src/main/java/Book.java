@@ -5,6 +5,7 @@ import java.util.Comparator;
 @EqualsAndHashCode
 @Getter
 @Setter
+@ToString
 public abstract class Book {
     private String title;
     private Author author;
