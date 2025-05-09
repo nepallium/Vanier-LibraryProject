@@ -95,7 +95,7 @@ public class NormalBook extends Book implements Issuable, Comparable<NormalBook>
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         NormalBook that = (NormalBook) o;
-        return loanPeriodWeeks == that.loanPeriodWeeks && Objects.equals(currentBorrower, that.currentBorrower) && Objects.equals(dueDate, that.dueDate) && status == that.status;
+        return loanPeriodWeeks == that.loanPeriodWeeks && Objects.equals(dueDate, that.dueDate) && status == that.status;
     }
 
     @Override

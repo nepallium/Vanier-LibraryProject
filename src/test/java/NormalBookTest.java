@@ -10,7 +10,7 @@ public class NormalBookTest {
 
     @BeforeEach
     public void setUp() {
-        book = new NormalBook("Test", new Author("Auth",50,Gender.FEMALE),"ISBN",100);
+        book = new NormalBook("Test", new Author("Auth", 50, Gender.FEMALE), "ISBN", 100);
     }
 
     // calculateLateFee()
@@ -54,7 +54,7 @@ public class NormalBookTest {
     }
 
     @Test
-   public void compareTo_thisNullDueDate_positive() {
+    public void compareTo_thisNullDueDate_positive() {
         book.setDueDate(null);
         NormalBook other = new NormalBook("X", book.getAuthor(), "I2", 10);
         other.setDueDate(LocalDate.now());
@@ -62,7 +62,7 @@ public class NormalBookTest {
     }
 
     @Test
-   public void compareTo_otherNullDueDate_negative() {
+    public void compareTo_otherNullDueDate_negative() {
         book.setDueDate(LocalDate.now());
         NormalBook other = new NormalBook("X", book.getAuthor(), "I2", 10);
         other.setDueDate(null);
@@ -70,11 +70,35 @@ public class NormalBookTest {
     }
 
     @Test
-   public void compareTo_earlierDueDate_vsLaterDueDate() {
+    public void compareTo_earlierDueDate_vsLaterDueDate() {
         NormalBook early = new NormalBook("A", book.getAuthor(), "1", 10);
         NormalBook later = new NormalBook("B", book.getAuthor(), "2", 10);
-        early.setDueDate(LocalDate.now().minusDays(2));
-        later.setDueDate(LocalDate.now().minusDays(5));
+        early.setDueDate(LocalDate.now().plusDays(2));
+        later.setDueDate(LocalDate.now().plusDays(5));
+
+        assertTrue(later.compareTo(early) > 0);
+        // and reverse
+        assertTrue(early.compareTo(later) < 0);
+    }
+
+    @Test
+    public void compareTo_earlierDueDate_vsLaterDueDate_past() {
+        NormalBook early = new NormalBook("A", book.getAuthor(), "1", 10);
+        NormalBook later = new NormalBook("B", book.getAuthor(), "2", 10);
+        early.setDueDate(LocalDate.now().minusDays(5));
+        later.setDueDate(LocalDate.now().minusDays(2));
+
+        assertTrue(later.compareTo(early) > 0);
+        // and reverse
+        assertTrue(early.compareTo(later) < 0);
+    }
+
+    @Test
+    public void compareTo_earlierDueDate_vsLaterDueDate_pastAndFuture() {
+        NormalBook early = new NormalBook("A", book.getAuthor(), "1", 10);
+        NormalBook later = new NormalBook("B", book.getAuthor(), "2", 10);
+        early.setDueDate(LocalDate.now().minusDays(5));
+        later.setDueDate(LocalDate.now().plusDays(2));
 
         assertTrue(later.compareTo(early) > 0);
         // and reverse
