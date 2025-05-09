@@ -58,7 +58,7 @@ public class LibrarianTest {
     }
 
     @Test
-    void testAddNewBooksToLibrary_normalCsv_importsAll() {
+    public void testAddNewBooksToLibrary_normalCsv_importsAll() {
         File file = new File("src/test/resources/normal_books.csv");
         librarian.addNewBooksToLibrary(file.toString());
 
@@ -77,7 +77,7 @@ public class LibrarianTest {
     }
 
     @Test
-    void testAddNewBooksToLibrary_malformedLines_importsValid() {
+    public void testAddNewBooksToLibrary_malformedLines_importsValid() {
         File file = new File("src/test/resources/malformed_books.csv");
         librarian.addNewBooksToLibrary(file.toString());
 
@@ -102,7 +102,7 @@ public class LibrarianTest {
     }
 
     @Test
-    void testAddNewBooksToLibrary_trimmed_importsValid() throws Exception {
+    public void testAddNewBooksToLibrary_trimmed_importsValid() {
         File file = new File("src/test/resources/trimmed_books.csv");
         librarian.addNewBooksToLibrary(file.toString());
 

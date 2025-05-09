@@ -25,6 +25,8 @@ public class StudentTest {
         Assertions.assertTrue(ok);
         Assertions.assertEquals(Issuable.Status.BORROWED, availableBook.getStatus());
         Assertions.assertTrue(student.getBorrowedBooks().contains(availableBook));
+        LocalDate expected = LocalDate.now().plusWeeks(availableBook.getLoanPeriodWeeks());
+        Assertions.assertEquals(expected, availableBook.getDueDate());
     }
 
     @Test
@@ -45,6 +47,9 @@ public class StudentTest {
         boolean ok = student.returnBook(availableBook);
         Assertions.assertTrue(ok);
         Assertions.assertFalse(student.getBorrowedBooks().contains(availableBook));
+
+        Assertions.assertEquals(null, availableBook.getDueDate());
+
         Assertions.assertEquals(Issuable.Status.PROCESSING, availableBook.getStatus());
         Assertions.assertEquals(availableBook, LibrarySystem.returnedBooks.peek());
     }

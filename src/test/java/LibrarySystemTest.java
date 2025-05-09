@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
@@ -7,11 +8,15 @@ import java.util.List;
 import java.security.InvalidParameterException;
 
 public class LibrarySystemTest {
+    @BeforeEach
+    public void setUp() {
+        LibrarySystem.books.clear();
+    }
+
     @Test
     public void testSearchBooks_normal() {
         NormalBook b1 = new NormalBook("Java Basics", new Author("A", 30, Gender.MALE), "J1", 100);
         NormalBook b2 = new NormalBook("Advanced Java", new Author("B", 40, Gender.FEMALE), "J2", 200);
-        LibrarySystem.books.clear();
         LibrarySystem.books.add(b1);
         LibrarySystem.books.add(b2);
 
@@ -24,7 +29,6 @@ public class LibrarySystemTest {
     @Test
     public void testSearchBooks_noMatches() {
         NormalBook b = new NormalBook("Python Intro", new Author("C", 25, Gender.MALE), "P1", 150);
-        LibrarySystem.books.clear();
         LibrarySystem.books.add(b);
 
         List<Book> result = LibrarySystem.searchBooks("c++");
@@ -35,7 +39,6 @@ public class LibrarySystemTest {
 
     @Test
     public void testSearchBooks_nullKeyword_throws() {
-        LibrarySystem.books.clear();
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             LibrarySystem.searchBooks(null);
         });
@@ -43,7 +46,6 @@ public class LibrarySystemTest {
 
     @Test
     public void testSearchBooks_blankKeyword_throws() {
-        LibrarySystem.books.clear();
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             LibrarySystem.searchBooks("   ");
         });
