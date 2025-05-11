@@ -47,17 +47,17 @@ Functionalities that will be demonstrated:
 - **Overloading**
   - In `LibrarySystem`, we provide two ways to lend:
 ``` java
-public boolean issueBook(NormalBook book, Student s) {}
+public boolean issueBook(NormalBook book, Student s)
 ```
 ```java
-public boolean issueBook(String isbn, String studentId) {}
+public boolean issueBook(String isbn, String studentId)
 ```
 
 ### 7. Text I/O
-- `addNewBooksToLibrary(String path)` in `Librarian` that reads a CSV file and adds all books to a `List`
+- `addNewBooksToLibrary(String path)` in `Librarian` that reads a CSV file and adds all books to a the `LibrarySystem`'s list of books
   - Provides an efficient alternative to add books to the library. Only accessible by `Librarian`s
 - `exportBooks()` in `LibrarySystem` that exports all current books into a CSV file
-  - Allows easy overview of current books. Librarians could also use this to quickly delete a book by removing a line from the CSV. 
+  - Allows easy overview of current books. Librarians could also use this to quickly delete a book by removing a line from the CSV, then running the above method to update the list.
 
 ### 8. Comparable and Comparator
 ``` java
@@ -66,12 +66,12 @@ public class NormalBook implements Comparable<NormalBook>
 - This will compare books based on their due date, useful for students
 
 ``` java
-public class Book implements Comparator<Book>
+public static class BookComparator implements Comparator<Book>
 ```
-- This will compare books based on either title, pages, author, or isbn 
+- This will compare books based on either title, pages, author, or isbn (default)
 
 ### 9. UML Class Diagram
-- Navigate to `doc/uml_class_diagram`
+- Navigate to `doc/uml_class_diagram.pdf`
 
 ### 10. Deliverable 2
 For Deliverable 2:
@@ -81,3 +81,10 @@ For Deliverable 2:
 - Partial implementations:
   - Basic CSV read/write
   - Book display
+
+### 11. Deliverable 3
+Complete implementation of all methods
+
+### 12. Deliverable 4
+Project report
+- Navigate to `doc/project_report.pdf`
