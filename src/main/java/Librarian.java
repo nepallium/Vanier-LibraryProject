@@ -67,6 +67,8 @@ public class Librarian extends User {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+
+        LibrarySystem.exportBooks();
     }
 
     /**
@@ -78,6 +80,8 @@ public class Librarian extends User {
             returnedBook.setCurrentBorrower(null);
             returnedBook.setDueDate(null);
             returnedBook.setStatus(Issuable.Status.AVAILABLE);
+
+            LibrarySystem.exportBooks();
         }
     }
 }
