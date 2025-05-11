@@ -2,15 +2,60 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.security.InvalidParameterException;
 
 public class LibrarySystemTest {
+    private NormalBook normalBook;
+    private ReferenceBook referenceBook;
+    private Student student;
+
     @BeforeEach
     public void setUp() {
         LibrarySystem.books.clear();
+        LibrarySystem.students.clear();
+
+        // create one loanable and one non-loanable book
+        Author auth = new Author("Auth", 40, Gender.MALE);
+        normalBook = new NormalBook("Normal", auth, "ISBN-N", 100);
+        referenceBook = new ReferenceBook("Reference", auth, "ISBN-R", 200, "Shelf A", 5);
+
+        LibrarySystem.books.add(normalBook);
+        LibrarySystem.books.add(referenceBook);
+
+        // create and register a student
+        student = new Student("Jeremy", Gender.FEMALE);
+        LibrarySystem.students.add(student);
+    }
+
+    @Test
+    void issueBookByObject_returnsTrue() {
+        boolean ok = LibrarySystem.issueBook(normalBook, student);
+        Assertions.assertTrue(ok, "can borrow a normal book when it's available");
+        Assertions.assertEquals(Issuable.Status.BORROWED, normalBook.getStatus());
+        Assertions.assertTrue(student.getBorrowedBooks().contains(normalBook));
+    }
+
+    @Test
+    void issueBookByObject_returnsFalseWhenAlreadyBorrowed() {
+        LibrarySystem.issueBook(normalBook, student);
+        boolean ok = LibrarySystem.issueBook(normalBook, student);
+        Assertions.assertFalse(ok, "cannot borrow same book twice");
+    }
+
+    @Test
+    void issueBookByIsbn_returnsTrue() {
+        boolean ok = LibrarySystem.issueBook("ISBN-N", student.getId());
+        Assertions.assertTrue(ok, "can borrow book by isbn");
+        Assertions.assertEquals(Issuable.Status.BORROWED, normalBook.getStatus());
+        Assertions.assertTrue(student.getBorrowedBooks().contains(normalBook));
+    }
+
+    @Test
+    void issueBookByIsbn_returnsFalseForReferenceBook() {
+        boolean ok = LibrarySystem.issueBook("ISBN-R", student.getId());
+        Assertions.assertFalse(ok, "Should return false when attempting to borrow a non-loanable ReferenceBook");
+        Assertions.assertFalse(student.getBorrowedBooks().contains(referenceBook));
     }
 
     @Test
