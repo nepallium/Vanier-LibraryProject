@@ -12,11 +12,14 @@ public class StudentTest {
 
     @BeforeEach
     public void setUp() {
+        LibrarySystem.books.clear();
         student = new Student("Jane Doe", Gender.FEMALE);
         Author auth = new Author("Auth", 40, Gender.MALE);
         availableBook = new NormalBook("Avail", auth, "ISBN-A", 123);
+        LibrarySystem.books.add(availableBook);
         issuedBook = new NormalBook("Issued", auth, "ISBN-B", 200);
         issuedBook.setStatus(Issuable.Status.BORROWED);
+        LibrarySystem.books.add(issuedBook);
     }
 
     @Test
@@ -70,6 +73,8 @@ public class StudentTest {
         NormalBook b2 = new NormalBook("B2", new Author("X", 20, Gender.MALE), "X2", 10);
         b1.setLoanPeriodWeeks(4);
         b2.setLoanPeriodWeeks(1);
+        LibrarySystem.books.add(b1);
+        LibrarySystem.books.add(b2);
 
         student.borrowBook(b1);
         student.borrowBook(b2);

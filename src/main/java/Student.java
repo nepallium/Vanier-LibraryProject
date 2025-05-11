@@ -30,7 +30,7 @@ public class Student extends User {
             throw new IllegalArgumentException("book must not be null");
         }
 
-        if (!book.isAvailable() || borrowedBooks.contains(book)) {
+        if (!book.isAvailable() || borrowedBooks.contains(book) || !LibrarySystem.books.contains(book)) {
             return false;
         }
 
@@ -40,7 +40,10 @@ public class Student extends User {
         book.setCurrentBorrower(this);
         book.setStatus(Issuable.Status.BORROWED);
 
-        return borrowedBooks.add(book);
+        borrowedBooks.add(book);
+        LibrarySystem.exportBooks();
+
+        return true;
     }
 
     /**
@@ -54,11 +57,16 @@ public class Student extends User {
             throw new IllegalArgumentException("book must not be null");
         }
 
+        if (!LibrarySystem.books.contains(book)) {
+            return false;
+        }
+
         if (borrowedBooks.remove(book)) {
             book.setStatus(Issuable.Status.PROCESSING);
             book.setDueDate(null);
             book.setCurrentBorrower(null);
             LibrarySystem.returnedBooks.offer(book);
+            LibrarySystem.exportBooks();
             return true;
         }
 
